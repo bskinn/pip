@@ -84,6 +84,10 @@ commands_dict = OrderedDict([
         'pip._internal.commands.completion', 'CompletionCommand',
         'A helper command used for command completion.',
     )),
+    ('thank', CommandInfo(
+        'pip._internal.commands.thank', 'ThankCommand',
+        'Print info for thanking/donating to packages.',
+    )),
     ('debug', CommandInfo(
         'pip._internal.commands.debug', 'DebugCommand',
         'Show information useful for debugging.',
