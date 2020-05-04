@@ -1,19 +1,41 @@
+# The following comment should be removed at some point in the future.
+# mypy: disallow-untyped-defs=False
+
+from __future__ import absolute_import
+
+from optparse import Values
+from typing import Any, List
+
+import pip._vendor.requests as requests
+
 from pip._internal.cli.base_command import Command
-#from pip._internal.cli
+from pip._internal.cli.status_codes import SUCCESS
 from pip._internal.exceptions import CommandError
+
+
+json_url_format = "https://pypi.org/pypi/{}/json".format
 
 
 class ThankCommand(Command):
 
     def __init__(self, *args, **kw):
         super(ThankCommand, self).__init__(*args, **kw)
-#        self.cmd_opts.add_option(
-#            '-i
 
     def run(self, options, args):
-            if not args:
-                raise CommandError('Missing package argument.')
-            query = args[0]
-            print(f"You just thanked {query}")
+        # type: (Values, List[Any]) -> int
+        if not args:
+            raise CommandError('Missing package argument.')
 
-            
+        query = args[0]
+
+        # Need to add exception handling
+        resp = requests.get(json_url_format(query))
+        json_data = resp.json()
+
+        funding = json_data["info"]["project_urls"].get("Funding")
+
+        print("Funding link: {}".format(funding))
+
+        print("You just thanked {}".format(query))
+
+        return SUCCESS
